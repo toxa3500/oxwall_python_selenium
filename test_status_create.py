@@ -1,11 +1,10 @@
 
-
 def test_status_create(logged_user, app, posts_text):
     old_posts = app.get_posts()
     app.create_post(posts_text)
     app.wait_new_post(len(old_posts))
     new_post = app.get_posts()[0]
-    # assert new_post.text == "Great day!!!"
+    assert new_post.text == posts_text
     # assert new_post.author == logged_user
     # assert new_post.time == "within 1 min"
 

@@ -1,16 +1,23 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
-from selenium import webdriver
 
 from custom_wait_conditions import presence_of_N_elements_located
 
+# class Session:
+#     def __init__(self, driver):
+#         self.driver = driver
+#         self.wait = WebDriverWait(driver, 5)
+#
+#     def login_as(self, user):
+#         pass
 
 class Oxwall:
     def __init__(self, driver):
         self.driver = driver
         self.wait = WebDriverWait(driver, 5)
+        # self.session = Session(driver)
 
     def login_as(self, username, password):
         # Login
@@ -22,9 +29,9 @@ class Oxwall:
         password_field = self.driver.find_element_by_name('password')
         password_field.send_keys(password)
         password_field.send_keys(Keys.ENTER)
-        # wait until login finished
+        # Wait until login finished
         # TODO: wait until Dashboard appear or User menu
-        self.wait.until(EC.presence_of_element_located((By.NAME, 'status')))
+        self.wait.until(expected_conditions.presence_of_element_located((By.NAME, 'status')))
 
     def create_post(self, text):
         # Input text in Status field
@@ -43,14 +50,6 @@ class Oxwall:
         )
 
     def logout(self):
-        ava = self.driver.find_element_by_css_selector(
-            'div.ow_console_item.ow_console_dropdown.ow_console_dropdown_hover')
-        (webdriver.ActionChains(self.driver)
-         .move_to_element(ava)
-         .move_to_element(self.driver.find_element_by_xpath('//*[@href="https://demo.oxwall.com/sign-out"]'))
-         .click()
-         .perform()
-         )
         pass
         # TODO: fix Sign out
         # wait.until(

@@ -31,13 +31,15 @@ def app(driver):
 
 @pytest.fixture()
 def logged_user(driver):
-    main_page = MainPage(driver)
+    # username = "admin"
+    # password = "pass"
     username = "demo"
     password = "demo"
 
+    main_page = MainPage(driver)
     sign_in_page = main_page.sign_in_click()
-    dash_page = sign_in_page.fill_form(username, password)
-    sign_in_page.sign_in_click()
+    sign_in_page.fill_form(username, password)
+    dash_page = sign_in_page.submit()
     yield username
     # dash_page.logout()
 

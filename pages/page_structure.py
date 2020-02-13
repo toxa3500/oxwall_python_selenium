@@ -3,7 +3,6 @@ from pages.locators import SignInPageLocator
 
 
 class SignInPageElements(Page):
-
     @property
     def username_field(self):
         return self.find_element(SignInPageLocator.USERNAME_FIELD)

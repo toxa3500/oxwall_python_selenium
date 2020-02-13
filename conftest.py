@@ -9,11 +9,11 @@ from pages.internal_pages import MainPage
 def driver():
     driver = webdriver.Chrome()
     driver.implicitly_wait(5)
+    # base_url = 'http://127.0.0.1:81/oxwall/'
     base_url = 'https://demo.oxwall.com'
-    # base_url = 'http://127.0.0.1/oxwall/'
     driver.get(base_url)
     yield driver
-    driver.quit()
+    # driver.quit()
 
 
 @pytest.fixture()
@@ -27,7 +27,6 @@ def app(driver):
 #     app.login_as(username, "pass")
 #     yield username
 #     app.logout()
-
 
 @pytest.fixture()
 def logged_user(driver):

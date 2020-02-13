@@ -1,10 +1,28 @@
+from pages.internal_pages import DashboardPage
+import pytest
 
-def test_status_create(logged_user, app, posts_text):
-    old_posts = app.get_posts()
-    app.create_post(posts_text)
-    app.wait_new_post(len(old_posts))
-    new_post = app.get_posts()[0]
-    assert new_post.text == posts_text
+post_text_list = [
+    "Happy day!!!1235467",
+    "!@#%^&*(_)_",
+    "Привет, мир!"
+]
+
+
+@pytest.mark.parametrize("input_text", post_text_list, ids=["Alhanum", "Symbols", "Cyrilic"])
+def test_post_create(logged_user, driver, input_text):
+
+    dashboard_page = DashboardPage(driver)
+    old_posts = dashboard_page.posts
+    dashboard_page.create_post(input_text)
+    dashboard_page.wait_new_post(len(old_posts))
+    new_post = dashboard_page.posts[0]
+    assert input_text in new_post.text
+
+    # old_posts = app.get_posts()
+    # app.create_post("Great day!!!")
+    # app.wait_new_post(len(old_posts))
+    # new_post = app.get_posts()[0]
+    # assert new_post.text == "Great day!!!"
     # assert new_post.author == logged_user
     # assert new_post.time == "within 1 min"
 

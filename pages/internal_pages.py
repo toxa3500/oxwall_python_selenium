@@ -19,7 +19,7 @@ from pages.page_structure import SignInPageElements
 #     @property
 #     def sign_in_button(self):
 #         return self.find_element(SignInPageLocator.SIGN_IN_BUTTON)
-
+from pages.post_block import PostBlock
 
 
 class SignInPage(SignInPageElements):
@@ -72,7 +72,7 @@ class MainPage(InternalPage):
     pass
 
 
-class DashboardPage(Page):
+class DashboardPage(InternalPage):
     STATUS_BLOCK = (By.XPATH, "//li[contains(@id, 'action-feed')]")
     # ??? STATUS_TEXT = (By.CLASS_NAME, 'ow_newsfeed_content')
     STATUS_USER = (By.CSS_SELECTOR, ".ow_newsfeed_string > a")
@@ -90,7 +90,12 @@ class DashboardPage(Page):
 
     @property
     def posts(self):
-        return self.find_visible_elements(self.STATUS_BLOCK)
+        post_elements = self.find_visible_elements(self.STATUS_BLOCK)
+        post_objects = []
+        for el in post_elements:
+            post_objects.append(PostBlock(el))
+        return post_objects
+        # return [PostBlock(el) for el in self.find_visible_elements(self.STATUS_BLOCK)]
 
     def create_post(self, text):
         self.post_text_field.clear()

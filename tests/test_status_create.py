@@ -1,22 +1,30 @@
+from conftest import PROJECT_DIR
 from pages.internal_pages import DashboardPage
 import pytest
+import json
+from data.random_string import random_string
+import os.path
 
-post_text_list = [
-    "Happy day!!!1235467",
-    "!@#%^&*(_)_",
-    "Привет, мир!"
-]
+filename = os.path.join(PROJECT_DIR, "data", "posts.json")
 
 
-@pytest.mark.parametrize("input_text", post_text_list, ids=["Alhanum", "Symbols", "Cyrilic"])
+with open(filename, encoding="utf8") as f:
+    post_text_list = json.load(f)
+
+for _ in range(3):
+    post_text_list.append(random_string(maxlen=1000, spaces=True, whitespases=True))
+
+
+@pytest.mark.parametrize("input_text", post_text_list)
 def test_post_create(logged_user, driver, input_text):
-
     dashboard_page = DashboardPage(driver)
     old_posts = dashboard_page.posts
     dashboard_page.create_post(input_text)
     dashboard_page.wait_new_post(len(old_posts))
     new_post = dashboard_page.posts[0]
-    assert input_text in new_post.text
+    assert new_post.text == input_text
+    assert new_post.time == "within 1 minute"
+    assert new_post.user == logged_user
 
     # old_posts = app.get_posts()
     # app.create_post("Great day!!!")

@@ -22,6 +22,11 @@ class Page:
                              message=f"No element located {locator}")
         return el
 
+    def find_elements(self, locator):
+        el = self.wait.until(EC.presence_of_all_elements_located(locator),
+                             message=f"No element located {locator}")
+        return el
+
     def find_visible_element(self, locator):
         el = self.wait.until(EC.visibility_of_element_located(locator),
                              message=f"No visible element located {locator}")

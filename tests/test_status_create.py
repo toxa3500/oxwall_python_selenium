@@ -4,6 +4,7 @@ import pytest
 import json
 from data.random_string import random_string
 import os.path
+import time
 
 filename = os.path.join(PROJECT_DIR, "data", "posts.json")
 
@@ -26,17 +27,27 @@ def test_post_create(logged_user, driver, input_text):
     assert new_post.time == "within 1 minute"
     assert new_post.user == logged_user
 
-    # old_posts = app.get_posts()
-    # app.create_post("Great day!!!")
-    # app.wait_new_post(len(old_posts))
-    # new_post = app.get_posts()[0]
-    # assert new_post.text == "Great day!!!"
-    # assert new_post.author == logged_user
-    # assert new_post.time == "within 1 min"
+
+def test_set_like_to_post(logged_user, driver):
+    dashboard_page = DashboardPage(driver)
+    old_post = dashboard_page.posts[0]
+    if old_post.is_liked:
+        likes_before = int(old_post.likes_count) - 1
+    else:
+        likes_before = int(old_post.likes_count) + 1
+    old_post.add_like()
+    time.sleep(1)
+    assert int(old_post.likes_count) == likes_before
 
 
-# def test_set_like_to_post(logged_user, app):
-#     post = app.get_posts()[0]
-#     likes_before = post.get_likes()
-#     post.set_like()
-#     assert post.get_likes() == likes_before + 1
+def test_add_comment_to_post(logged_user, driver, text="new comment"):
+    dashboard_page = DashboardPage(driver)
+    old_post = dashboard_page.posts[0]
+    old_post.click_add_comment()
+    old_post.add_comment(text)
+    assert old_post.comment_text() == text
+
+def test_add_comment_to_post2(logged_user, driver, text="new comment"):
+    pass
+
+

@@ -10,11 +10,23 @@ from value_object.user import User
 from pychromedriver import chromedriver_path
 
 
+PROJECT_DIR = os.path.dirname(__file__)
+
+
+
+
+@pytest.fixture(scope="session")
+def config():
+    with open(os.path.join(PROJECT_DIR, "config.json")) as f:
+        return json.load(f)
+
+
 @pytest.fixture()
-def driver():
+def driver(config, selenium):
+    # driver = selenium
     driver = webdriver.Chrome(executable_path=chromedriver_path)
     driver.implicitly_wait(5)
-    base_url = 'http://127.0.0.1/oxwall/'
+    base_url = config["web"]["base_url"]
     driver.get(base_url)
     yield driver
     # driver.quit()
@@ -33,8 +45,8 @@ def app(driver):
 #     app.logout()
 
 @pytest.fixture()
-def logged_user(driver):
-    user = User(username="admin", password="pass", real_name="Admin")
+def logged_user(driver, config):
+    user = User(**config['web']["user"])
     main_page = MainPage(driver)
     sign_in_page = main_page.sign_in_click()
     sign_in_page.fill_form(user.username, user.password)
@@ -44,11 +56,8 @@ def logged_user(driver):
 
 
 @pytest.fixture(scope="session")
-def db():
-    db = OxwallDB(host='localhost',
-                  user='root',
-                  password='mysql',
-                  db='oxwa207')
+def db(config):
+    db = OxwallDB(**config['db'])
     yield db
     db.close()
 
@@ -65,7 +74,7 @@ def posts_text(request):
     return request.param
 
 
-PROJECT_DIR = os.path.dirname(__file__)
+
 filename = os.path.join(PROJECT_DIR, "data", "users.json")
 
 with open(filename, encoding="utf8") as f:

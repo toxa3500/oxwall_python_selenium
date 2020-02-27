@@ -47,6 +47,7 @@ def test_add_comment_to_post(logged_user, driver, text="new comment"):
     old_post.add_comment(text)
     assert old_post.comment_text() == text
 
+
 def test_add_comment_to_post2(logged_user, driver, text="new comment"):
     pass
 

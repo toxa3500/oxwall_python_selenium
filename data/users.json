@@ -1,9 +1,30 @@
 [
     {
-    "username": "23admin",
+    "username": "AD22admin22",
     "password": "pass",
     "real_name": "AD22Admin2",
     "email": "AD22admin2@mail.com",
     "is_admin": true
-    }
+},
+{
+    "username": "test1",
+    "password": "pass",
+    "email": "test1@mail.com",
+    "real_name": "Tester",
+    "is_admin": false
+},
+{
+    "username": "test8",
+    "password": "pass",
+    "email": "test8@mail.com",
+    "real_name": "Tester",
+    "is_admin": false
+},
+{
+    "username": "test5",
+    "password": "pass",
+    "email": "test5@mail.com",
+    "real_name": "Tester",
+    "is_admin": false
+}
 ]
